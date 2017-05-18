@@ -33,7 +33,7 @@ body{
   height:100%;
   padding-left:1rem;
   padding-right:1rem;
-  vertical-align:middlle;
+  vertical-align:middle;
   color:white;
   font-size:0.625rem;
   letter-spacing:.05rem;
@@ -57,21 +57,22 @@ body{
 /*Medium and small screens (640px)*/
 @media (min-width:640px){
   html{font-size:112%;}
-  }
+
     .column{
       float:left;
       padding-left:1rem;
       padding-right:1rem;
     }
+
     .column.full{width:100%;}
     .column.two-thirds{width:66.7%;}
     .column.half{width:50%;}
     .column.third{width:33.3%;}
     .column.fourth{width:25%;}
     .column.flow-opposite{float:right;}
-
+}
 /*Large screens (1024px)*/
-@media (min-width:1040px){
+@media (min-width:1024px){
   html{font-size:120%;}
 }
 .clearfix::before, .clearfix::after{
