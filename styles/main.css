@@ -27,6 +27,7 @@ body{
   color:white;
   text-decoration:none;
 }
+
 .links-container .navbar-link{
   display:table-cell;
   position:relative;
@@ -43,6 +44,12 @@ body{
   cursor:pointer;
 }
 .links-container .navbar-link:hover{
+  color:rgb(233,50,117);
+}
+.navbar .links-container:active{
+  background:white;
+}
+.navbar-link:active{
   color:rgb(233,50,117);
 }
 *, *::before, *::after{
