@@ -29,6 +29,21 @@ var albumMarconi = {
   ]
 };
 
+var albumSummer = {
+  title: 'Summer',
+  artist: 'The Four Seasons',
+  label: '365',
+  year: '2017',
+  albumArtUrl: 'assets/images/album_covers/03.png',
+  songs: [
+    {title: 'Long Days', duration: '3:11'},
+    {title: 'Lake Parties', duration: '4:56'},
+    {title: 'Cookouts', duration: '5:04'},
+    {title: 'Hot, hot, hot', duration: '2:43'},
+    {title: 'Skeeter Bites', duration: '1:53'}
+  ]
+};
+
 var createSongRow = function(songNumber, songName, songLength){
   var template =
   '<tr class="album-view-song-item">'
