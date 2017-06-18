@@ -81,3 +81,17 @@ var setCurrentAlbum = function(album){
 window.onload = function(){
   setCurrentAlbum(albumPicasso);
 };
+//Assignment 11: Add an event listener to the album cover. When a user clicks it, the album page content should toggle between the three album objects
+var albumArray = [albumPicasso, albumMarconi, albumSummer]; //how to iterate thru repeatedly? 0, 1, 2, 0, 1, 2, 0...? Add a condition "if [i] == 2, on next click [i] == 0?
+
+var currentAlbum = document.getElementsByClassName("album-cover-art"); //target the album link only
+//actually, make album a link...innerHTML?
+currentAlbum.innerHTML = //make a link of album cover art property?
+currentAlbum.addEventListener("click", goToNext);
+
+function goToNext() {
+  var nextAlbum = currentAlbum[i]++;
+  if (albumArray[i] == 2) {
+    nextAlbum == albumArray[0];
+  }
+};
