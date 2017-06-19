@@ -29,10 +29,25 @@ var albumMarconi = {
   ]
 };
 
+var albumSummer = {
+  title: 'Summer',
+  artist: 'The Four Seasons',
+  label: '365',
+  year: '2017',
+  albumArtUrl: 'assets/images/album_covers/03.png',
+  songs: [
+    {title: 'Long Days', duration: '3:11'},
+    {title: 'Lake Parties', duration: '4:56'},
+    {title: 'Cookouts', duration: '5:04'},
+    {title: 'Hot, hot, hot', duration: '2:43'},
+    {title: 'Skeeter Bites', duration: '1:53'}
+  ]
+};
+
 var createSongRow = function(songNumber, songName, songLength){
   var template =
   '<tr class="album-view-song-item">'
-  +'  <td class="song-item-number">' + songNumber + '</td>'
+  +'  <td class="song-item-number" data-song-number="' + songNumber + '">' + songNumber + '</td>'
   +'  <td class="song-item-title">' + songName + '</td>'
   +'  <td class="song-item-duration">' + songLength + '</td>'
   +'</tr>'
@@ -41,13 +56,15 @@ var createSongRow = function(songNumber, songName, songLength){
   return template;
 };
 
+var albumTitle = document.getElementsByClassName('album-view-title')[0];
+var albumArtist = document.getElementsByClassName('album-view-artist')[0];
+var albumReleaseInfo = document.getElementsByClassName('album-view-release-info')[0];
+var albumImage = document.getElementsByClassName('album-cover-art')[0];
+var albumSongList = document.getElementsByClassName('album-view-song-list')[0];
+
 var setCurrentAlbum = function(album){
   //#1: select all HTML elements to display on album page
-  var albumTitle = document.getElementsByClassName('album-view-title')[0];
-  var albumArtist = document.getElementsByClassName('album-view-artist')[0];
-  var albumReleaseInfo = document.getElementsByClassName('album-view-release-info')[0];
-  var albumImage = document.getElementsByClassName('album-cover-art')[0];
-  var albumSongList = document.getElementsByClassName('album-view-song-list')[0];
+
   //#2: identify and return values of certain nodes
   albumTitle.firstChild.nodeValue = album.title;
   albumArtist.firstChild.nodeValue = album.artist;
@@ -63,6 +80,36 @@ var setCurrentAlbum = function(album){
   }
 };
 
+var songListContainer = document.getElementsByClassName('album-view-song-list')[0];
+//Elements we'll be adding listeners to
+var songRows = document.getElementsByClassName('album-view-song-item');
+//Album button templates
+var playButtonTemplate = '<a class="album-song-button"><span class="ion-play"></span></a>';
 window.onload = function(){
   setCurrentAlbum(albumPicasso);
+
+songListContainer.addEventListener('mouseover', function(event){
+  //Only target individual song rows during event delegation
+  if(event.target.parentElement.className === 'album-view-song-item'){
+    //Change content from song# to play button's HTML
+    event.target.parentElement.querySelector('.song-item-number').innerHTML = playButtonTemplate;
+  }
+});
+
+  for(var i = 0; i<songRows.length; i++){
+    songRows[i].addEventListener('mouseleave', function(event){
+      //selects first child element, song-item-number
+      this.children[0].innerHTML = this.children[0].getAttribute('data-song-number');
+    });
+  }
+
+  var albumArray = [albumPicasso, albumMarconi, albumSummer];
+  var index = 1;
+  albumImage.addEventListener("click", function(event){
+    setCurrentAlbum(albumArray[index]);
+    index++;
+    if (index == albumArray.length){
+      index = 0;
+    }
+  });
 };
