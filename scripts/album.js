@@ -56,13 +56,15 @@ var createSongRow = function(songNumber, songName, songLength){
   return template;
 };
 
+var albumTitle = document.getElementsByClassName('album-view-title')[0];
+var albumArtist = document.getElementsByClassName('album-view-artist')[0];
+var albumReleaseInfo = document.getElementsByClassName('album-view-release-info')[0];
+var albumImage = document.getElementsByClassName('album-cover-art')[0];
+var albumSongList = document.getElementsByClassName('album-view-song-list')[0];
+
 var setCurrentAlbum = function(album){
   //#1: select all HTML elements to display on album page
-  var albumTitle = document.getElementsByClassName('album-view-title')[0];
-  var albumArtist = document.getElementsByClassName('album-view-artist')[0];
-  var albumReleaseInfo = document.getElementsByClassName('album-view-release-info')[0];
-  var albumImage = document.getElementsByClassName('album-cover-art')[0];
-  var albumSongList = document.getElementsByClassName('album-view-song-list')[0];
+
   //#2: identify and return values of certain nodes
   albumTitle.firstChild.nodeValue = album.title;
   albumArtist.firstChild.nodeValue = album.artist;
@@ -80,18 +82,16 @@ var setCurrentAlbum = function(album){
 
 window.onload = function(){
   setCurrentAlbum(albumPicasso);
+
+  var albumArray = [albumPicasso, albumMarconi, albumSummer];
+  var index = 1;
+  albumImage.addEventListener("click", function(event){
+    setCurrentAlbum(albumArray[index]);
+    index++;
+    if (index == albumArray.length){
+      index = 0;
+    }
+  });
 };
 //Assignment 11: Add an event listener to the album cover. When a user clicks it, the album page content should toggle between the three album objects
-var albumArray = [albumPicasso, albumMarconi, albumSummer]; //how to iterate thru repeatedly? 0, 1, 2, 0, 1, 2, 0...? Add a condition "if [i] == 2, on next click [i] == 0?
-
-var currentAlbum = document.getElementsByClassName("album-cover-art"); //target the album link only
-//actually, make album a link...innerHTML?
-currentAlbum.innerHTML = //make a link of album cover art property?
-currentAlbum.addEventListener("click", goToNext);
-
-function goToNext() {
-  var nextAlbum = currentAlbum[i]++;
-  if (albumArray[i] == 2) {
-    nextAlbum == albumArray[0];
-  }
-};
+ //how to iterate thru repeatedly? 0, 1, 2, 0, 1, 2, 0...? Add a condition "if [i] == 2, on next click [i] == 0?
