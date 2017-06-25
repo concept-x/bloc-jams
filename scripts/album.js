@@ -84,12 +84,18 @@ var setCurrentAlbum = function(album){
 var findParentByClassName = function(element, targetClass) {//takes current element & target parent class args
   if(element){//pass in element you want parent of
     var currentParent = element.parentElement;//set cP = immediate parent of current element
+    if (currentParent == null){
+    	return console.log("No parent found");
+    }//check to see if parent exists
     while(currentParent.className !== targetClass && currentParent.className !== null){//while cP class !== target class and cP class exists
       currentParent = currentParent.parentElement;//move one step up the DOM tree to find next parent
+      if (currentParent.ParentElement == null){
+      	return console.log("No parent found with that class name");
+      }//if all parent elements have been checked and none are target, console.log("No parent found with that class name")
     }
     return currentParent;//if 'if-condition' is no longer met, return cP & exit function (we've found target parent class)
   }
-};//end findParentByClassName function
+};
 
 //start getSongItem method...take element w/className & return .song-item-number class using switch stmt
 var getSongItem = function (element){//I got this right by mahself!!
@@ -151,7 +157,7 @@ songListContainer.addEventListener('mouseover', function(event){
   //Only target individual song rows during event delegation
   if(event.target.parentElement.className === 'album-view-song-item'){
     //Change content from song# to play button
-      
+
       var songItem = getSongItem(event.target);
 
       if(songItem.getAttribute('data-song-number') !== currentlyPlayingSong){
