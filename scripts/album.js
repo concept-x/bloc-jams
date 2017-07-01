@@ -85,12 +85,12 @@ var findParentByClassName = function(element, targetClass) {//takes current elem
   if(element){//pass in element you want parent of
     var currentParent = element.parentElement;//set cP = immediate parent of current element
     if (currentParent == null){
-    	return console.log("No parent found");
+    	console.log("No parent found");
     }//check to see if parent exists
     while(currentParent.className !== targetClass && currentParent.className !== null){//while cP class !== target class and cP class exists
       currentParent = currentParent.parentElement;//move one step up the DOM tree to find next parent
       if (currentParent.ParentElement == null){
-      	return console.log("No parent found with that class name");
+      	console.log("No parent found with that class name");
       }//if all parent elements have been checked and none are target, console.log("No parent found with that class name")
     }
     return currentParent;//if 'if-condition' is no longer met, return cP & exit function (we've found target parent class)
@@ -116,7 +116,7 @@ var getSongItem = function (element){//I got this right by mahself!!
       return findParentByClassName(element, 'album-view-song-item').querySelector('.song-item-number');
     case 'song-item-number': //if the element *is* what we're looking for, then
       return element;//just return it. Why isn't this the default?
-    default://answer is blank here...why?
+    default://answer is blank here...why? Return ends the function; we don't need a value
       return;
   }
 };
