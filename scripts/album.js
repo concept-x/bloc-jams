@@ -53,30 +53,27 @@ var createSongRow = function(songNumber, songName, songLength){
   +'</tr>'
   ;
 
-  return template;
+  return $(template);
 };
 
-var albumTitle = document.getElementsByClassName('album-view-title')[0];
-var albumArtist = document.getElementsByClassName('album-view-artist')[0];
-var albumReleaseInfo = document.getElementsByClassName('album-view-release-info')[0];
-var albumImage = document.getElementsByClassName('album-cover-art')[0];
-var albumSongList = document.getElementsByClassName('album-view-song-list')[0];
+
+var $albumTitle = $('.album-view-title');
+var $albumArtist = $('.album-view-artist');
+var $albumReleaseInfo = $('.album-view-release-info');
+var $albumImage = $('album-cover-art');
+var $albumSongList = $('.album-view-song-list');
 
 var setCurrentAlbum = function(album){
-  //#1: select all HTML elements to display on album page
+  $albumTitle.text(album.title);
+  $albumArtist.text(album.artist);
+  $albumReleaseInfo.text(album.year + ' ' + album.label);
+  $albumImage.attr('src', album.albumArtUrl);
+  $albumSongList.empty();
 
-  //#2: identify and return values of certain nodes
-  albumTitle.firstChild.nodeValue = album.title;
-  albumArtist.firstChild.nodeValue = album.artist;
-  albumReleaseInfo.firstChild.nodeValue = album.year + ' ' + album.label;
-  albumImage.setAttribute('src', album.albumArtUrl);
-
-  //#3: clear album song list HTML so js can dynamically populate info
-  albumSongList.innerHTML = '';
-
-  //#4: iterate thru album songs + insert them using innerHTML
+  //#4: iterate thru album songs + insert them using jQuery
   for (var i =0; i < album.songs.length; i++){
-    albumSongList.innerHTML += createSongRow(i + 1, album.songs[i].title, album.songs[i].duration);
+    var $newRow = createSongRow(i +1, album.songs[i].title, album.songs[i].duration);
+    $albumSongList.append($newRow);
   }
 };
 //ckpoint 13: change song# to pause button
@@ -151,7 +148,7 @@ songListContainer.addEventListener('mouseover', function(event){
   //Only target individual song rows during event delegation
   if(event.target.parentElement.className === 'album-view-song-item'){
     //Change content from song# to play button
-      
+
       var songItem = getSongItem(event.target);
 
       if(songItem.getAttribute('data-song-number') !== currentlyPlayingSong){
