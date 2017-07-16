@@ -9,7 +9,9 @@ var createSongRow = function(songNumber, songName, songLength){
   +'</tr>'
   ;
 
+//  var $row = $(template);
   var $row = $(template);
+
 
   var clickHandler = function (){
     var songNumber = $(this).attr('data-song-number');
@@ -53,14 +55,14 @@ var createSongRow = function(songNumber, songName, songLength){
   return $row;
 };
 
-
 var $albumTitle = $('.album-view-title');
 var $albumArtist = $('.album-view-artist');
 var $albumReleaseInfo = $('.album-view-release-info');
-var $albumImage = $('album-cover-art');
+var $albumImage = $('.album-cover-art');
 var $albumSongList = $('.album-view-song-list');
 
 var setCurrentAlbum = function(album){
+
   $albumTitle.text(album.title);
   $albumArtist.text(album.artist);
   $albumReleaseInfo.text(album.year + ' ' + album.label);
@@ -83,15 +85,21 @@ var currentlyPlayingSong = null;
 
 $(document).ready(function(){
   setCurrentAlbum(albumPicasso);
-});
 
   var albumArray = [albumPicasso, albumMarconi, albumSummer];
   var index = 1;
-  albumImage.addEventListener("click", function(event){
+  $albumImage.click(function(event){
     setCurrentAlbum(albumArray[index]);
     index++;
     if (index == albumArray.length){
       index = 0;
     }
   });
-};
+});
+  /*albumImage.addEventListener("click", function(event){
+    setCurrentAlbum(albumArray[index]);
+    index++;
+    if (index == albumArray.length){
+      index = 0;
+    }
+  });*/
