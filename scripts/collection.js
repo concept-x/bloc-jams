@@ -20,12 +20,9 @@ var buildCollectionItemTemplate = function(){
     //#2 no jQuery yet, but just in case, wrap template in jQ object
     return $(template);
   };
-  //window.onload = function(){
+
   $(window).load(function(){
-  //  var collectionContainer = document.getElementsByClassName('album-covers')[0];
     var $collectionContainer = $('.album-covers');
-    //#3
-    //#4
     $collectionContainer.empty();//literally empties out the node
 
     for (var i=0; i < 12; i++){
