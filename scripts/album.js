@@ -36,7 +36,6 @@ var createSongRow = function(songNumber, songName, songLength){
 
   var clickHandler = function (){
       var songNumber = parseInt($(this).attr('data-song-number'));
-
       if (currentlyPlayingSongNumber !== null) {
     // Revert to song number for currently playing song because user started playing new song.
           var currentlyPlayingCell = $('.song-item-number[data-song-number="' + currentlyPlayingSongNumber + '"]');
@@ -63,6 +62,18 @@ var createSongRow = function(songNumber, songName, songLength){
 					}
         }
     };
+
+		var togglePlayFromPlayerBar = function(){
+				if (currentSoundFile.isPaused()) {
+		       songNumberCell.html(pauseButtonTemplate);
+						$('.main-controls .play-pause').html(playerBarPauseButton);
+		        currentSoundFile.play();
+		        } else {
+		        songNumberCell.html(playButtonTemplate);
+		        $('.main-controls .play-pause').html(playerBarPlayButton);
+		        currentSoundFile.pause();
+		        }
+		  };
 
     var onHover = function(event){
       var songNumberCell = $(this).find('.song-item-number');
@@ -198,6 +209,7 @@ $(document).ready(function(){
     if (index == albumArray.length){
       index = 0;
     }
+		var toggleBar = $('.main-controls .play-pause').click(togglePlayFromPlayerBar());
   });
 });
 
