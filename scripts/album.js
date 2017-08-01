@@ -13,6 +13,12 @@ var setSong = function(songNumber){
 	setVolume(currentVolume);
 };
 
+var seek = function(time) {
+		if (currentSoundFile) {
+				currentSoundFile.setTime(time);
+		}
+}
+
 var setVolume = function(volume){
 	if (currentSoundFile){
 		currentSoundFile.setVolume(volume);
@@ -56,6 +62,7 @@ var createSongRow = function(songNumber, songName, songLength){
 					$(this).html(pauseButtonTemplate);
 					$('.main-controls .play-pause').html(playerBarPauseButton);
 					currentSoundFile.play();
+					updateSeekBarWhileSongPlays();
 		}		else {
 					$(this).html(playButtonTemplate);
 					$('.main-controls .play-pause').html(playerBarPlayButton);
@@ -109,6 +116,66 @@ var setCurrentAlbum = function(album){
   }
 };
 
+//only starts after song has been paused, then played again.???
+var updateSeekBarWhileSongPlays = function(){
+	if (currentSoundFile){
+//#10 bind timeupdate to currentSoundFile. TimeUpdate fires repeatedly during playback.
+		currentSoundFile.bind('timeupdate', function(event){
+//#11 calculate seekBarFillRation with getTime & getDuration = custom buzz methods
+			var seekBarFillRatio = this.getTime() / this.getDuration();
+			var $seekBar = $('.seek-control .seek-bar');
+
+			updateSeekPercentage($seekBar, seekBarFillRatio);
+		});
+	}
+};
+
+var updateSeekPercentage = function($seekBar, seekBarFillRatio){
+	var offsetXPercent = seekBarFillRatio * 100;
+	//#1 making sure our percentage 0 < x < 100
+	offsetXPercent = Math.max(0, offsetXPercent);
+	offsetXPercent = Math.min(100, offsetXPercent);
+	//#2 convert percentage to string + % sign for CSS to use
+	var percentageString = offsetXPercent + '%';
+	$seekBar.find('.fill').width(percentageString);
+	$seekBar.find('.thumb').css({left: percentageString});
+};
+
+var setupSeekBars = function(){
+	//#6 use jQuery to find all .seek-bar elements inside .player-bar elements
+	var $seekBars = $('.player-bar .seek-bar');
+
+	$seekBars.click(function(event){
+		//#3 pageX = jQuery x-value of click event; subtract seek bar offset from click-X
+		var offsetX = event.pageX - $(this).offset().left;
+		var barWidth = $(this).width();
+		//#4 calculae seekBarFillRatio
+		var seekBarFillRatio = offsetX / barWidth;
+		//#5 function call w/parameters
+		updateSeekPercentage($(this), seekBarFillRatio);
+	});
+	//#7 find .thumb inside seekBar; add event listener for mousedown
+	$seekBars.find('.thumb').mousedown(function(event){
+		//#8 use 'this' to determine whether song seek or volume control fired mousedown
+		var $seekBar = $(this).parent();
+
+		//#9 first instance of .bind
+		$(document).bind('mousemove.thumb', function(event){
+			var offsetX = event.pageX - $seekBar.offset().left;
+			var barWidth = $seekBar.width();
+			var seekBarFillRatio = offsetX / barWidth;
+
+			updateSeekPercentage($seekBar, seekBarFillRatio);
+		});
+
+		//#10 unbind...comment out to see thumb & fill move after mouse release
+		$(document).bind('mouseup.thumb', function(){
+			$(document).unbind('mousemove.thumb');
+			$(document).unbind('mouseup.thumb');
+		});
+	});
+};
+
 var nextSong = function() {
     var currentSongIndex = trackIndex(currentAlbum, currentSongFromAlbum);
     // Note that we're _incrementing_ the song here
@@ -124,6 +191,7 @@ var nextSong = function() {
     // Set a new current song
 		setSong(currentSongIndex + 1);
 		currentSoundFile.play();
+		updateSeekBarWhileSongPlays();
   //  currentlyPlayingSongNumber = currentSongIndex + 1;
   //  currentSongFromAlbum = currentAlbum.songs[currentSongIndex];
 
@@ -152,6 +220,7 @@ var previousSong = function() {
     // Set a new current song
 		setSong(currentSongIndex + 1);
 		currentSoundFile.play();
+		updateSeekBarWhileSongPlays();
     //currentlyPlayingSongNumber = currentSongIndex + 1;
     //currentSongFromAlbum = currentAlbum.songs[currentSongIndex];
 
@@ -187,6 +256,7 @@ var $nextButton = $('.main-controls .next');
 
 $(document).ready(function(){
   setCurrentAlbum(albumPicasso);
+	setupSeekBars();
   $previousButton.click(previousSong);
   $nextButton.click(nextSong);
 
