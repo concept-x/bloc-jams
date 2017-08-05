@@ -53,8 +53,15 @@ var createSongRow = function(songNumber, songName, songLength){
     // Switch from Play -> Pause button to indicate new song is playing.
           setSong(songNumber);
 					currentSoundFile.play();
-					$(this).html(pauseButtonTemplate);
+					updateSeekBarWhileSongPlays();
 					currentSongFromAlbum = currentAlbum.songs[songNumber -1];
+
+					var $volumeFill = $('.volume .fill');
+					var $volumeThumb = $('.volume .thumb');
+					$volumeFill.width(currentVolume + '%');
+					$volumeThumb.css({left: currentVolume + '%'});
+					
+					$(this).html(pauseButtonTemplate);
           updatePlayerBarSong();
       } else if (currentlyPlayingSongNumber === songNumber) {
     // Switch from Pause -> Play button to pause currently playing song.
@@ -69,7 +76,7 @@ var createSongRow = function(songNumber, songName, songLength){
 					currentSoundFile.pause();
 					}
         }
-    };
+    }; //end clickhandler
 
     var onHover = function(event){
       var songNumberCell = $(this).find('.song-item-number');
@@ -153,12 +160,19 @@ var setupSeekBars = function(){
 		var seekBarFillRatio = offsetX / barWidth;
 		//#5 function call w/parameters
 		updateSeekPercentage($(this), seekBarFillRatio);
-	});
+
+		if ($(this).parent().attr("class") === 'seek-control'){
+			seek(currentSoundFile.getDuration() * seekBarFillRatio);
+			} else {setVolume(seekBarFillRatio * 100);
+			};
+});
+
+
 	//#7 find .thumb inside seekBar; add event listener for mousedown
 	$seekBars.find('.thumb').mousedown(function(event){
 		//#8 use 'this' to determine whether song seek or volume control fired mousedown
 		var $seekBar = $(this).parent();
-
+//******put conditionals here*****
 		//#9 first instance of .bind
 		$(document).bind('mousemove.thumb', function(event){
 			var offsetX = event.pageX - $seekBar.offset().left;
