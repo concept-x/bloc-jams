@@ -36,7 +36,7 @@ var createSongRow = function(songNumber, songName, songLength){
   +'  <td class="song-item-title">' + songName + '</td>'
   +'  <td class="song-item-duration">' + songLength + '</td>'
   +'</tr>'
-;
+;// added in during error hunt*************
 
   var $row = $(template);
 
@@ -60,7 +60,7 @@ var createSongRow = function(songNumber, songName, songLength){
 					var $volumeThumb = $('.volume .thumb');
 					$volumeFill.width(currentVolume + '%');
 					$volumeThumb.css({left: currentVolume + '%'});
-					
+
 					$(this).html(pauseButtonTemplate);
           updatePlayerBarSong();
       } else if (currentlyPlayingSongNumber === songNumber) {
@@ -99,7 +99,7 @@ var createSongRow = function(songNumber, songName, songLength){
   $row.find('.song-item-number').click(clickHandler);
   $row.hover(onHover, offHover);
   return $row;
-};
+}
 
 var $albumTitle = $('.album-view-title');
 var $albumArtist = $('.album-view-artist');
@@ -131,7 +131,7 @@ var updateSeekBarWhileSongPlays = function(){
 //#11 calculate seekBarFillRation with getTime & getDuration = custom buzz methods
 			var seekBarFillRatio = this.getTime() / this.getDuration();
 			var $seekBar = $('.seek-control .seek-bar');
-
+//**Assign 21 #1 here
 			updateSeekPercentage($seekBar, seekBarFillRatio);
 		});
 	}
@@ -172,7 +172,6 @@ var setupSeekBars = function(){
 	$seekBars.find('.thumb').mousedown(function(event){
 		//#8 use 'this' to determine whether song seek or volume control fired mousedown
 		var $seekBar = $(this).parent();
-//******put conditionals here*****
 		//#9 first instance of .bind
 		$(document).bind('mousemove.thumb', function(event){
 			var offsetX = event.pageX - $seekBar.offset().left;
@@ -268,12 +267,30 @@ var currentVolume = 80;
 var $previousButton = $('.main-controls .previous');
 var $nextButton = $('.main-controls .next');
 
+//first, establish your variable ...
+var $toggle = $('.main-controls .play-pause')
+
+//then, your function (i ironed out a few kinks, there may still be a couple things that need to be finessed)
+var togglePlayFromPlayerBar = function () {
+  var $songNumberCell = getSongNumberCell(currentlyPlayingSongNumber)
+  if (currentSoundFile.isPaused()) {
+    $songNumberCell.html(pauseButtonTemplate);
+    $toggle.html(playerBarPauseButton);
+    currentSoundFile.play();
+  } else {
+  	$songNumberCell.html(playButtonTemplate)
+    $toggle.html(playerBarPlayButton);
+    currentSoundFile.pause();
+	}
+}
+
 $(document).ready(function(){
   setCurrentAlbum(albumPicasso);
 	setupSeekBars();
   $previousButton.click(previousSong);
   $nextButton.click(nextSong);
-
+	//then, in your document ready ...
+	$toggle.click(togglePlayFromPlayerBar)
   var albumArray = [albumPicasso, albumMarconi, albumSummer];
   var index = 1;
   $albumImage.click(function(event){
