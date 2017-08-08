@@ -34,9 +34,9 @@ var createSongRow = function(songNumber, songName, songLength){
   '<tr class="album-view-song-item">'
   +'  <td class="song-item-number" data-song-number="' + songNumber + '">' + songNumber + '</td>'
   +'  <td class="song-item-title">' + songName + '</td>'
-  +'  <td class="song-item-duration">' + songLength + '</td>'
+  +'  <td class="song-item-duration">' + filterTimeCode(songLength) + '</td>'
   +'</tr>'
-;// added in during error hunt*************
+;
 
   var $row = $(template);
 
@@ -126,6 +126,9 @@ var setCurrentAlbum = function(album){
 //only starts after song has been paused, then played again.???
 var updateSeekBarWhileSongPlays = function(){
 	if (currentSoundFile){
+		var setCurrentTimeInPlayerBar = function(currentTime){
+			$('.current-time').text(currentTime);
+		};
 //#10 bind timeupdate to currentSoundFile. TimeUpdate fires repeatedly during playback.
 		currentSoundFile.bind('timeupdate', function(event){
 //#11 calculate seekBarFillRation with getTime & getDuration = custom buzz methods
@@ -133,6 +136,7 @@ var updateSeekBarWhileSongPlays = function(){
 			var $seekBar = $('.seek-control .seek-bar');
 //**Assign 21 #1 here
 			updateSeekPercentage($seekBar, seekBarFillRatio);
+			setCurrentTimeInPlayerBar(filterTimeCode(this.getTime()));
 		});
 	}
 };
@@ -301,10 +305,23 @@ $(document).ready(function(){
     }
   });
 });
+var filterTimeCode = function(timeInSeconds){
+var wholeSecs = parseFloat(timeInSeconds);
+var wholeMins = (wholeSecs / 60);
+wholeMins = Math.floor(wholeMins);
+var remainderSecs = (wholeSecs % 60);
+var returnTime = wholeMins+':'+remainderSecs;
+returnTime;
+ };
+
 
 var updatePlayerBarSong = function(){//lesson 19
+	var setTotalTimeInPlayerBar = function(totalTime){
+		$('.total-time').text(totalTime);
+	};
  $(".currently-playing .song-name").text(currentSongFromAlbum.title);
  $('.currently-playing .artist-name').text(currentAlbum.artist);
  $('.currently-playing .artist-song-mobile').text(currentSongFromAlbum.title + " - " + currentAlbum.artist);
  $('.main-controls .play-pause').html(playerBarPauseButton);
+ setTotalTimeInPlayerBar(filterTimeCode(currentSoundFile.getDuration()));
 };
