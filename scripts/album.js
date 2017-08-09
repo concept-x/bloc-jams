@@ -310,8 +310,10 @@ var wholeSecs = parseFloat(timeInSeconds);
 var wholeMins = (wholeSecs / 60);
 wholeMins = Math.floor(wholeMins);
 var remainderSecs = (wholeSecs % 60);
+//remainderSecs = Math.floor(remainderSecs * 100/ 100).toFixed(2));
+//var truncateReturnedTime = remainderSecs.toFixed(2);
 var returnTime = wholeMins+':'+remainderSecs;
-returnTime;
+return returnTime;
  };
 
 
