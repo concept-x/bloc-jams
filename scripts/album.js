@@ -276,7 +276,7 @@ var $toggle = $('.main-controls .play-pause')
 
 //then, your function (i ironed out a few kinks, there may still be a couple things that need to be finessed)
 var togglePlayFromPlayerBar = function () {
-  var $songNumberCell = getSongNumberCell(currentlyPlayingSongNumber)
+  var $songNumberCell = getSongNumberCell(currentlyPlayingSongNumber);
   if (currentSoundFile.isPaused()) {
     $songNumberCell.html(pauseButtonTemplate);
     $toggle.html(playerBarPauseButton);
@@ -310,6 +310,10 @@ var wholeSecs = parseFloat(timeInSeconds);
 var wholeMins = (wholeSecs / 60);
 wholeMins = Math.floor(wholeMins);
 var remainderSecs = (wholeSecs % 60);
+remainderSecs = Math.floor(remainderSecs);
+ if(remainderSecs < 10){
+	 remainderSecs = "0" + remainderSecs
+ };
 //remainderSecs = Math.floor(remainderSecs * 100/ 100).toFixed(2));
 //var truncateReturnedTime = remainderSecs.toFixed(2);
 var returnTime = wholeMins+':'+remainderSecs;
@@ -325,5 +329,5 @@ var updatePlayerBarSong = function(){//lesson 19
  $('.currently-playing .artist-name').text(currentAlbum.artist);
  $('.currently-playing .artist-song-mobile').text(currentSongFromAlbum.title + " - " + currentAlbum.artist);
  $('.main-controls .play-pause').html(playerBarPauseButton);
- setTotalTimeInPlayerBar(filterTimeCode(currentSoundFile.getDuration()));
+ setTotalTimeInPlayerBar(filterTimeCode(currentSongFromAlbum.duration));
 };
